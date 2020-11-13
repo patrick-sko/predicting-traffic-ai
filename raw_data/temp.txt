@@ -1,0 +1,3 @@
+Getting date column
+Getting last row
+Done getting last row
