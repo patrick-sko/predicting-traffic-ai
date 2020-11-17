@@ -5,21 +5,30 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 from data_manip import sample
 
-MODEL_DIR = "../models/"
+PLOT_PATH = "../model/linear_regression/plot/"
 
 # Test individual features
 # Returns a map of featurename:regressor
-def train_regress_individual(trainingdata, explanatory_cols, response_col):
+# If plot = True saves to plot
+def train_regress_individual(trainingdata, explanatory_cols, response_col, plot=True):
 
     reg_map = {}
 
-    Y = trainingdata[response_col]
+    Y = trainingdata[response_col].values.reshape(-1,1)
 
     for s in explanatory_cols:
-        X = trainingdata[[s]].values.reshape(-1,1)
+        X = trainingdata[s].values.reshape(-1,1)
         reg = LinearRegression().fit(X,Y)
         reg_map[s] = reg
 
+        if plot:
+            plt.suptitle("Individual Linear Regression Feature - " + s)
+            plt.scatter(X,Y)
+            plt.plot(X, reg.predict(X),color="red")
+            plt.xlabel(s)
+            plt.ylabel("Travel time")
+            plt.savefig(PLOT_PATH + "linear_regression_individual_ft_" + s + ".png")
+            plt.clf()
     return reg_map 
 
 # Predict individual features on test data using a map of regressors

@@ -38,3 +38,6 @@ test_predict = (reg.predict(test[EXPLANATORY_COLS]))
 print("Error of Random forest on test data"\
         + ":" \
         + str(mean_squared_error(test_predict, test[RESPONSE_COL])))
+
+#Get max depth in the forest
+#print(max([estimator.get_depth() for estimator in reg.estimators_]))
