@@ -3,12 +3,16 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
 
 from data_manip import discretized_data, sample
 
 # Path to processed data
 #DATA_PATH = "../data/processed/dataset1.xlsx"
 DATA_PATH = "../data/processed/dataset-numeric-full.xlsx"
+
+# Path to folder for figures
+PLOT_PATH = "../model/random_forest/"
 
 # Travel time is our response variable
 RESPONSE_COL = "Travel Time"
@@ -37,120 +41,151 @@ Y = training[RESPONSE_COL]
 
 XPredictable = training[PREDICTABLE_COLS]
 
-nValuesSmall = np.arange(10, 100, 10)
-nValues = np.arange(100, 1100, 200)
-nAll = np.concatenate((nValuesSmall, nValues))
-mValues = np.arange(1, 13)
-dValues = np.arange(10, 50, 2)
-nMSE = nAll
-dMSE = np.arange(1, 13)
-mMSE = np.arange(10, 50, 2)
+# nValuesSmall = np.arange(10, 100, 10)
+# nValues = np.arange(100, 1200, 200)
+nAll = []
+nVal = 10
+while nVal < 100:
+        nAll.append(nVal)
+        nVal+=10
+while nVal < 1200:
+        nAll.append(nVal)
+        nVal+=200
+
+# nAll = np.concatenate((nValuesSmall, nValues))
+mValues = []
+mVal = 1
+while mVal < 14:
+        mValues.append(mVal)
+        mVal+=1
+
+# mValues = np.arange(1, 14)
+dValues = []
+dVal = 10 
+while dVal < 52:
+        dValues.append(dVal)
+        dVal+=2
+
+# dValues = np.arange(10, 50, 2)
+# nMSE = nAll
+# mMSE = np.arange(1, 13)
+# dMSE = np.arange(10, 50, 2)
+
+nMSE = []
+nMAE = []
+mMSE = []
+mMAE = []
+dMSE = []
+dMAE = []
+
 minNSmallError = 100
 minErrorN = 100
 minErrorM = 100
 minErrorD = 100
 optimalSmallN = 0
-optimalN = 0
-optimalM = 0
+optimalN = 1100
+optimalM = 1
 optimalD = 0
 
 #setting random_state=seed for all RF below to produce deterministic results
 
 # Finding optimal number of trees for RF
-
-i = 0
 for n in nAll:
         regN = RandomForestRegressor(n_estimators=n, random_state=0).fit(X,Y)
 
         val_predict = (regN.predict(validation[EXPLANATORY_COLS]))
-        errorN = mean_squared_error(val_predict, validation[RESPONSE_COL])
-        nMSE[i] = errorN
-        i+=1
+        errorN = np.sqrt(mean_squared_error(val_predict, validation[RESPONSE_COL]))
+        errorNMAE = mean_absolute_error(val_predict, validation[RESPONSE_COL])
+        nMSE.append(errorN)
+        nMAE.append(errorNMAE)
+        # i+=1
         if (errorN < minErrorN): 
                 optimalN = n
-        print("Error of Random forest on test data with "\
-                + str(n) + " trees generated" \
-                + ": " \
-                + str(errorN))
+        print("RMSE of Random forest on test data with {} trees generated: {} \n".format(n, errorN))
+        print("MAE of Random forest on test data with {} trees generated: {} \n".format(n, errorNMAE))
 
 
 figN, axN = plt.subplots()
-axN.plot(nAll, nMSE, label="Validation Set")
+axN.plot(nAll, nMSE, label="RMSE")
+axN.plot(nAll, nMAE, label="MAE")
 axN.set_xlabel("n_estimators in RandomForestRegressor")
-axN.set_ylabel("MSE")
-axN.set_title("MSE variation in RandomForestRegressor with different n_estimators")
+axN.set_ylabel("Error")
+axN.set_title("RMSE and MAE variation in Random Forest with \n different n_estimators")
 axN.legend()
-figN.savefig("MSE-RF-n-estimators.png")
-
-# if (minNSmallError < 1.4954692245966177):
-#         n = optimalSmallN
-# else:
-#         n = 1.4954692245966177
+figN.savefig(PLOT_PATH + "RF-n-estimators.png")
 
 # Finding optimal number of values to split on
-
-j = 0
 for m in mValues:
         regM = RandomForestRegressor(max_features=m, random_state=0).fit(X,Y)
 
         val_predict = (regM.predict(validation[EXPLANATORY_COLS]))
-        errorM = mean_squared_error(val_predict, validation[RESPONSE_COL])
-        nMSE[j] = errorM
-        j+=1
+        errorM = np.sqrt(mean_squared_error(val_predict, validation[RESPONSE_COL]))
+        errorMMAE = mean_absolute_error(val_predict, validation[RESPONSE_COL])
+        mMSE.append(errorM)
+        mMAE.append(errorMMAE)
+        # j+=1
         if (errorM < minErrorM): 
                 optimalM = m
 
-        print("Error of Random forest on test data with "\
-                + str(m) + " features split on" \
-                + ": " \
-                + str(errorM))
+        print("RSME of Random forest on test data with {} features split on: {} \n".format(m, errorM))
+        print("MAE of Random forest on test data with {} features split on: {} \n".format(m, errorMMAE))
+
 
 figM, axM = plt.subplots()
-axM.plot(mValues, mMSE, label="Validation Set")
+axM.plot(mValues, mMSE, label="RMSE")
+axM.plot(mValues, mMAE, label="MAE")
 axM.set_xlabel("max_features in RandomForestRegressor")
-axM.set_ylabel("MSE")
-axM.set_title("MSE variation in RandomForestRegressor with different max_features")
+axM.set_ylabel("Error")
+axM.set_title("RMSE and MAE variation in RandomForestRegressor with \n different max_features")
 axM.legend()
-figM.savefig("MSE-RF-max-features.png")
+figM.savefig(PLOT_PATH + "RF-max-features.png")
 
 # Finding optimal max depth
-k = 0
 for d in dValues:
         regD = RandomForestRegressor(max_depth=d, random_state=0).fit(X,Y)
         val_predict = (regD.predict(validation[EXPLANATORY_COLS]))
-        errorD = mean_squared_error(val_predict, validation[RESPONSE_COL])
-        nMSE[k] = errorD
-        k+=1
+        errorD = np.sqrt(mean_squared_error(val_predict, validation[RESPONSE_COL]))
+        errorDMAE = mean_absolute_error(val_predict, validation[RESPONSE_COL])
+        dMSE.append(errorD)
+        dMAE.append(errorDMAE)
+        # k+=1
         if (errorD < minErrorD): 
                 optimalD = d
-        print("Error of Random forest on test data with a max depth of "\
-                + str(optimalD) \
-                + " : " \
-                + str(errorD)) 
+        print("RMSE of Random forest on test data with a max depth of {}: {} \n".format(d, errorD))
+        print("MAE of Random forest on test data with a max depth of {}: {} \n".format(d, errorDMAE))
 
 figD, axD = plt.subplots()
-axD.plot(dValues, dMSE, label="Validation Set")
+axD.plot(dValues, dMSE, label="RMSE")
+axD.plot(dValues, dMAE, label="MAE")
 axD.set_xlabel("max_depth in RandomForestRegressor")
-axD.set_ylabel("MSE")
-axD.set_title("MSE variation in RandomForestRegressor with different max_depth")
+axD.set_ylabel("Error")
+axD.set_title("RMSE and MAE variation in RandomForestRegressor \n with different max_depth")
 axD.legend()
-figD.savefig("MSE-RF-max-depth.png")
+figD.savefig(PLOT_PATH + "RF-max-depth.png")
+
+
+# Final regression with optimal values
+regNonOptimal = RandomForestRegressor(random_state=0).fit(X,Y)
+test_predict = (regNonOptimal.predict(test[EXPLANATORY_COLS]))
+errorNonOptimnal = np.sqrt(mean_squared_error(test_predict, test[RESPONSE_COL]))
+errorNonOptimnalMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
+print("RMSE of Random forest on test data with default values for n_estimators (100), max_features(13), and max_deppth(none): {} \n".format(errorNonOptimnal))
+print("MAE of Random forest on test data with default values for n_estimators (100), max_features(13), and max_deppth(none): {} \n".format(errorNonOptimnalMAE))
 
 # Final regression with optimal values
 regFinal = RandomForestRegressor(n_estimators=optimalN, max_features=optimalM, max_depth=optimalD, random_state=0).fit(X,Y)
 test_predict = (regFinal.predict(test[EXPLANATORY_COLS]))
-errorFinal = mean_squared_error(test_predict, test[RESPONSE_COL])
-print("Error of Random forest on test data with "\
-        + str(optimalN) + "trees generated and " + str(optimalM) + "features split on" \
-        + " : " \
-        + str(errorFinal)) 
+errorFinal = np.sqrt(mean_squared_error(test_predict, test[RESPONSE_COL]))
+errorFinalMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
+print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinal))
+print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinalMAE))
 
 
 # Final regression with optimal values and only predictable columns
 regFinalPredictable = RandomForestRegressor(n_estimators=optimalN, max_features=optimalM, max_depth=optimalD, random_state=0).fit(XPredictable,Y)
 test_predict = (regFinalPredictable.predict(test[PREDICTABLE_COLS]))
-errorPredictable = mean_squared_error(test_predict, test[RESPONSE_COL])
-print("Error of Random forest on test data with "\
-        + str(optimalN) + "trees generated and " + str(optimalM) + "features split on, using only predictable columns" \
-        + " : " \
-        + str(errorPredictable)) 
+errorPredictable = np.sqrt(mean_squared_error(test_predict, test[RESPONSE_COL]))
+errorPredictableMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
+
+print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {} \n".format(optimalN, optimalM, optimalD, errorPredictable))
+print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {} \n".format(optimalN, optimalM, optimalD, errorPredictableMAE))
