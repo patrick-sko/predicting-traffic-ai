@@ -41,7 +41,7 @@ def predict_regress_individual(reg_map, testdata, response_col):
         test_feature_data = testdata[s].values.reshape(-1,1)
         test_predict = reg.predict(test_feature_data)
 
-        error = mean_squared_error(test_predict, testdata[response_col])
+        error = np.sqrt(mean_squared_error(test_predict, testdata[response_col]))
         error_map[s] = error
 
     return error_map
@@ -59,5 +59,5 @@ def predict_regress_feature_set(reg, testdata, explanatory_cols, response_col):
     test_feature_data = testdata[explanatory_cols]
     test_predict = reg.predict(test_feature_data)
 
-    error = mean_squared_error(test_predict, testdata[response_col])
+    error = np.sqrt(mean_squared_error(test_predict, testdata[response_col]))
     return error

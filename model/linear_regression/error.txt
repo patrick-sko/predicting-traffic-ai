@@ -1,0 +1,21 @@
+Individual feature RMSEs:
+validation RMSE of feature Date: 4.675471965149248
+validation RMSE of feature TOD: 4.655314139763688
+validation RMSE of feature Day: 4.629030592395944
+validation RMSE of feature Month: 4.673276642291514
+validation RMSE of feature Holiday: 4.667144747907658
+validation RMSE of feature Incidents: 4.559475418147197
+validation RMSE of feature humidity: 4.565594248290329
+validation RMSE of feature pressure: 4.675013107738204
+validation RMSE of feature temperature: 4.518011213445268
+validation RMSE of feature weather_description: 4.669213822420825
+validation RMSE of feature wind_direction: 4.4526321474348505
+validation RMSE of feature wind_speed: 4.500172241038751
+validation RMSE of feature LaneClosures: 4.068282542564411
+==================================================================
+Feature subset RMSEs:
+intuitive features linear regression RMSE: 3.891079485234405
+low error features linear regression RMSE: 3.9478784663136537
+forecastable features linear regression RMSE: 3.8555874254248654
+date only features linear regression RMSE: 4.596942134469952
+all features linear regression RMSE: 3.817908017143279
