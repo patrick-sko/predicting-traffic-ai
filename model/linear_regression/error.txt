@@ -1,4 +1,4 @@
-Individual feature RMSEs:
+Individual feature Errors:
 validation RMSE of feature Date: 4.675471965149248
 validation RMSE of feature TOD: 4.655314139763688
 validation RMSE of feature Day: 4.629030592395944
@@ -12,10 +12,28 @@ validation RMSE of feature weather_description: 4.669213822420825
 validation RMSE of feature wind_direction: 4.4526321474348505
 validation RMSE of feature wind_speed: 4.500172241038751
 validation RMSE of feature LaneClosures: 4.068282542564411
+validation MAE of feature Date: 3.611673565717072
+validation MAE of feature TOD: 3.5802444153741795
+validation MAE of feature Day: 3.547292613584088
+validation MAE of feature Month: 3.6082372603015185
+validation MAE of feature Holiday: 3.5986057891722254
+validation MAE of feature Incidents: 3.4976310970462055
+validation MAE of feature humidity: 3.441848935077119
+validation MAE of feature pressure: 3.6141658059972097
+validation MAE of feature temperature: 3.4219193960430343
+validation MAE of feature weather_description: 3.6012889676997277
+validation MAE of feature wind_direction: 3.3068256330494217
+validation MAE of feature wind_speed: 3.3646550364475654
+validation MAE of feature LaneClosures: 2.8572213409872815
 ==================================================================
-Feature subset RMSEs:
-intuitive features linear regression RMSE: 3.891079485234405
-low error features linear regression RMSE: 3.9478784663136537
-forecastable features linear regression RMSE: 3.8555874254248654
-date only features linear regression RMSE: 4.596942134469952
-all features linear regression RMSE: 3.817908017143279
+Feature subset Error:
+validation RMSE of inuitivivefeature subset: 3.891079485234405
+validation RMSE of lowest errorfeature subset: 3.9478784663136537
+validation RMSE of forecastable featuresfeature subset: 3.8555874254248654
+validation RMSE of date onlyfeature subset: 4.596942134469952
+validation RMSE of fullfeature subset: 3.817908017143279
+validation MAE of inuitivivefeature subset: 3.891079485234405
+validation MAE of lowest errorfeature subset: 3.9478784663136537
+validation MAE of forecastable featuresfeature subset: 3.8555874254248654
+validation MAE of date onlyfeature subset: 4.596942134469952
+validation MAE of fullfeature subset: 3.817908017143279

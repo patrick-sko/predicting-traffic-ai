@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from data_manip import sample
 
@@ -33,6 +33,7 @@ def train_regress_individual(trainingdata, explanatory_cols, response_col, plot=
 
 # Predict individual features on test data using a map of regressors
 # Meant to be composed with train_regress_individual
+# returns map of column:(rmse_error, mae_error)
 def predict_regress_individual(reg_map, testdata, response_col):
     # reg_map expected to be a map of column:regressor
 
@@ -41,8 +42,9 @@ def predict_regress_individual(reg_map, testdata, response_col):
         test_feature_data = testdata[s].values.reshape(-1,1)
         test_predict = reg.predict(test_feature_data)
 
-        error = np.sqrt(mean_squared_error(test_predict, testdata[response_col]))
-        error_map[s] = error
+        rmse_error = np.sqrt(mean_squared_error(test_predict, testdata[response_col]))
+        mae_error = mean_absolute_error(test_predict, testdata[response_col])
+        error_map[s] = (rmse_error, mae_error)
 
     return error_map
 
@@ -54,10 +56,12 @@ def train_basic_regress_feature_set(trainingdata, explanatory_cols, response_col
 
     return reg
 
-# predict a dataset returning the mean squared error
+# predict a dataset returning the mean squared error and mean absolute error
 def predict_regress_feature_set(reg, testdata, explanatory_cols, response_col):
     test_feature_data = testdata[explanatory_cols]
     test_predict = reg.predict(test_feature_data)
 
-    error = np.sqrt(mean_squared_error(test_predict, testdata[response_col]))
-    return error
+    rmse_error = np.sqrt(mean_squared_error(test_predict, testdata[response_col]))
+    mae_error = mean_absolute_error(test_predict, testdata[response_col])
+    return (rmse_error, mae_error)
+
