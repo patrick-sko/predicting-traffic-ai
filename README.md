@@ -17,8 +17,22 @@ TBD
 
 Running the Code:
 -----------------
-TBD
+(Will set directories properly later but currently requires you to be `cd`'d into `src/`
+
+```
+cd src/
+```
+
+Running linear regression training
+```
+python3 train_linear.py 
+```
+
+Running random forest training
+```
+python3 train_forest.py
+```
 
 Sample Ouput:
 -------------
-TBD
+Currently outputs mean squared error for comparison
