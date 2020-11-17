@@ -38,7 +38,7 @@ def sample(dataset):
     test = partitionedData[1];
     validation = partitionedData[2];
 
-    return (training, test, validation)
+    return (training, validation, test)
 
 # Specialized function to make TOD continuous
 def numeric_tod(dataset):

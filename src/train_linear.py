@@ -7,7 +7,7 @@ import linear_regression as lr
 from data_manip import sample
 
 # Path to save plots
-PLOT_PATH = "../model/plots/"
+COMPARISON_PLOT_PATH = "../model/linear_regression/comparison/"
 # Path to processed data
 DATA_PATH = "../data/processed/dataset-numeric-full.xlsx"
 
@@ -19,39 +19,65 @@ RESPONSE_COL = "Travel Time"
 # DATE which we do not take as explanatory
 DATE_COL = "Date"
 # All columns except Travel time and date are explanatory
-EXPLANATORY_COLS = ["TOD","Day","Month","Holiday","Incidents","humidity","pressure","temperature","weather_description","wind_direction","wind_speed","LaneClosures"]
+EXPLANATORY_COLS = ["Date", "TOD","Day","Month","Holiday","Incidents","humidity","pressure","temperature","weather_description","wind_direction","wind_speed","LaneClosures"]
 
-(training, validation, test) =  sample(dataset)
+(training, validation, validation) =  sample(dataset)
 
 individual_ft_regs = lr.train_regress_individual(training, EXPLANATORY_COLS, RESPONSE_COL)
-individual_test_errors = lr.predict_regress_individual(individual_ft_regs, test, RESPONSE_COL)
+individual_validation_errors = lr.predict_regress_individual(individual_ft_regs, validation, RESPONSE_COL)
 
-for k,v in individual_test_errors.items():
-    print("Testing Error of feature " + k + ": " + str(v))
+for k,v in individual_validation_errors.items():
+    print("validation Error of feature " + k + ": " + str(v))
 
 # Plot a bar chart of individual error
-plt.title("Mean squared errors of individual features")
-plt.bar(range(len(individual_test_errors)), list(individual_test_errors.values()), align='center')
-plt.xticks(range(len(individual_test_errors)), list(individual_test_errors.keys()))
+plt.suptitle("Mean squared errors of individual features")
+plt.figure(figsize = (22,10))
+plt.bar(range(len(individual_validation_errors)), list(individual_validation_errors.values()), align='center')
+plt.xticks(range(len(individual_validation_errors)), list(individual_validation_errors.keys()), fontsize=10, wrap=True)
 plt.xlabel("feature")
 plt.ylabel("mean squared error")
-plt.savefig(PLOT_PATH + "regression_error_features_bar.png")
+plt.savefig(COMPARISON_PLOT_PATH + "linear_regression_individual_bar.png")
 
+subset_validation_errors = {}
 # An feature subset based on what intuitively affects the traffic
-EXPLANATORY_SUBSET_INTUITION = ["TOD","Day","Month","Holiday","Incidents","temperature","weather_description","LaneClosures"]
+EXPLANATORY_SUBSET_INTUITION = ["Date", "TOD","Day","Month","Holiday","Incidents","temperature","weather_description","LaneClosures"]
 reg_intuitive = lr.train_basic_regress_feature_set(training, EXPLANATORY_SUBSET_INTUITION, RESPONSE_COL)
 err_intuitive = lr.predict_regress_feature_set(reg_intuitive,training, EXPLANATORY_SUBSET_INTUITION , RESPONSE_COL)
+subset_validation_errors["inuitivive"] = err_intuitive
 print("intuitive features linear regression error:" + str(err_intuitive))
 
 # An feature subset based on features that had low mean squared error
-EXPLANATORY_SUBSET_LOW_ERROR = ["humidity", "wind_direction","wind_speed","LaneClosures"]
-reg_low_error = lr.train_basic_regress_feature_set(training, EXPLANATORY_SUBSET_LOW_ERROR , RESPONSE_COL)
-err_low = lr.predict_regress_feature_set(reg_low_error, training, EXPLANATORY_SUBSET_LOW_ERROR, RESPONSE_COL)
-print("low error features linear regression error:" + str(err_low))
+EXPLANATORY_SUBSET_LOW_ERROR_FEW = ["Date", "humidity", "wind_direction","wind_speed","LaneClosures"]
+reg_low_error_few = lr.train_basic_regress_feature_set(training, EXPLANATORY_SUBSET_LOW_ERROR_FEW , RESPONSE_COL)
+err_low_few = lr.predict_regress_feature_set(reg_low_error_few, training, EXPLANATORY_SUBSET_LOW_ERROR_FEW, RESPONSE_COL)
+subset_validation_errors["lowest error"] = err_low_few
+print("low error features linear regression error:" + str(err_low_few))
 
-# Testing on all features
+# Forecastable features (that can be predicted)
+EXPLANATORY_SUBSET_PREDICTABLE = ["Date", "TOD","Day","Month","Holiday","humidity","pressure","temperature","weather_description","wind_direction","wind_speed","LaneClosures"]
+reg_predictable = lr.train_basic_regress_feature_set(training, EXPLANATORY_SUBSET_PREDICTABLE, RESPONSE_COL)
+err_predictable = lr.predict_regress_feature_set(reg_predictable, training, EXPLANATORY_SUBSET_PREDICTABLE, RESPONSE_COL)
+subset_validation_errors["forecastable features"] = err_predictable
+print("forecastable features linear regression error:" + str(err_predictable))
+
+# Date only features
+EXPLANATORY_SUBSET_DATE_ONLY = ["Date", "TOD","Day","Month","Holiday"]
+reg_date = lr.train_basic_regress_feature_set(training, EXPLANATORY_SUBSET_DATE_ONLY, RESPONSE_COL)
+err_date = lr.predict_regress_feature_set(reg_date, training, EXPLANATORY_SUBSET_DATE_ONLY, RESPONSE_COL)
+subset_validation_errors["date only"] = err_date
+print("date only features linear regression error:" + str(err_date))
+
+# Training on all features
 reg_complete = lr.train_basic_regress_feature_set(training, EXPLANATORY_COLS, RESPONSE_COL)
 err_complete = lr.predict_regress_feature_set(reg_complete, training, EXPLANATORY_COLS, RESPONSE_COL)
+subset_validation_errors["full"] = err_complete
 print("all features linear regression error:" + str(err_complete))
 
-
+# plot feature subset errors in bar graph
+plt.suptitle("Mean squared errors of feature subsets")
+plt.figure(figsize = (12,5))
+plt.bar(range(len(subset_validation_errors)), list(subset_validation_errors.values()), align='center')
+plt.xticks(range(len(subset_validation_errors)), list(subset_validation_errors.keys()), fontsize=10)
+plt.xlabel("feature subset")
+plt.ylabel("mean squared error")
+plt.savefig(COMPARISON_PLOT_PATH + "linear_regression_subset_bar.png")
