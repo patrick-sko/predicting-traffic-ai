@@ -82,7 +82,7 @@ for k,(v1,v2) in subset_validation_errors.items():
     rmse_errors[k] = v1
 
 for k,(v1,v2) in subset_validation_errors.items():
-    print("validation MAE of " + k + " feature subset: " + str(v1))
+    print("validation MAE of " + k + " feature subset: " + str(v2))
     mae_errors[k] = v2
 
 # plot feature subset errors in bar graph
@@ -147,5 +147,5 @@ for k,(v1,v2) in subset_validation_errors.items():
     rmse_errors[k] = v1
 
 for k,(v1,v2) in subset_validation_errors.items():
-    print("validation MAE of " + k + " feature subset for tuned data: " + str(v1))
+    print("validation MAE of " + k + " feature subset for tuned data: " + str(v2))
     mae_errors[k] = v2

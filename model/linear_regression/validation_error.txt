@@ -32,11 +32,11 @@ validation RMSE of lowest error feature subset: 3.950154247649287
 validation RMSE of forecastable features feature subset: 3.8621083977329196
 validation RMSE of date only feature subset: 4.611992506119995
 validation RMSE of full feature subset: 3.825340047060211
-validation MAE of inuitivive feature subset: 3.8984079914056156
-validation MAE of lowest error feature subset: 3.950154247649287
-validation MAE of forecastable features feature subset: 3.8621083977329196
-validation MAE of date only feature subset: 4.611992506119995
-validation MAE of full feature subset: 3.825340047060211
+validation MAE of inuitivive feature subset: 2.7186386683797803
+validation MAE of lowest error feature subset: 2.7625397863691226
+validation MAE of forecastable features feature subset: 2.6970010103187216
+validation MAE of date only feature subset: 3.4999584569341113
+validation MAE of full feature subset: 2.6704442326744666
 ==================================================================
 Tuned Error:
 validation RMSE of feature rush_dist: 3.9671693117078792
@@ -46,8 +46,8 @@ validation RMSE of lowest error feature subset for tuned data: 3.950154247649287
 validation RMSE of forecastable features feature subset for tuned data: 3.7809630169825494
 validation RMSE of date only feature subset for tuned data: 3.908182296601407
 validation RMSE of full feature subset for tuned data: 3.7520135878097403
-validation MAE of inuitivive feature subset for tuned data: 3.7798290877633964
-validation MAE of lowest error feature subset for tuned data: 3.950154247649287
-validation MAE of forecastable features feature subset for tuned data: 3.7809630169825494
-validation MAE of date only feature subset for tuned data: 3.908182296601407
-validation MAE of full feature subset for tuned data: 3.7520135878097403
+validation MAE of inuitivive feature subset for tuned data: 2.6439868937083535
+validation MAE of lowest error feature subset for tuned data: 2.7625397863691226
+validation MAE of forecastable features feature subset for tuned data: 2.644891211731085
+validation MAE of date only feature subset for tuned data: 2.7120570966103346
+validation MAE of full feature subset for tuned data: 2.6198205699272537
