@@ -1,0 +1,53 @@
+Individual feature Errors:
+validation RMSE of feature Date: 4.696029110179184
+validation RMSE of feature TOD: 4.675451986240717
+validation RMSE of feature Day: 4.6511154690456555
+validation RMSE of feature Month: 4.694515637019428
+validation RMSE of feature Holiday: 4.683797906266145
+validation RMSE of feature Incidents: 4.587367580087368
+validation RMSE of feature humidity: 4.5770758733547225
+validation RMSE of feature pressure: 4.695923831571039
+validation RMSE of feature temperature: 4.540566493789286
+validation RMSE of feature weather_description: 4.687718182772003
+validation RMSE of feature wind_direction: 4.478997122290722
+validation RMSE of feature wind_speed: 4.516141017881118
+validation RMSE of feature LaneClosures: 4.0775382052129645
+validation MAE of feature Date: 3.623278112219642
+validation MAE of feature TOD: 3.5906364346408695
+validation MAE of feature Day: 3.5681093507421804
+validation MAE of feature Month: 3.620953017448863
+validation MAE of feature Holiday: 3.6081596663761983
+validation MAE of feature Incidents: 3.505516709327188
+validation MAE of feature humidity: 3.4437532092896666
+validation MAE of feature pressure: 3.626234764752505
+validation MAE of feature temperature: 3.436518034161797
+validation MAE of feature weather_description: 3.6110319564219173
+validation MAE of feature wind_direction: 3.323804700457218
+validation MAE of feature wind_speed: 3.3715570553280316
+validation MAE of feature LaneClosures: 2.8654898473140054
+==================================================================
+Feature subset Error:
+validation RMSE of inuitivive feature subset: 3.8984079914056156
+validation RMSE of lowest error feature subset: 3.950154247649287
+validation RMSE of forecastable features feature subset: 3.8621083977329196
+validation RMSE of date only feature subset: 4.611992506119995
+validation RMSE of full feature subset: 3.825340047060211
+validation MAE of inuitivive feature subset: 3.8984079914056156
+validation MAE of lowest error feature subset: 3.950154247649287
+validation MAE of forecastable features feature subset: 3.8621083977329196
+validation MAE of date only feature subset: 4.611992506119995
+validation MAE of full feature subset: 3.825340047060211
+==================================================================
+Tuned Error:
+validation RMSE of feature rush_dist: 3.9671693117078792
+validation MAE of feature rush_dist: 2.739314149680248
+validation RMSE of inuitivive feature subset for tuned data: 3.7798290877633964
+validation RMSE of lowest error feature subset for tuned data: 3.950154247649287
+validation RMSE of forecastable features feature subset for tuned data: 3.7809630169825494
+validation RMSE of date only feature subset for tuned data: 3.908182296601407
+validation RMSE of full feature subset for tuned data: 3.7520135878097403
+validation MAE of inuitivive feature subset for tuned data: 3.7798290877633964
+validation MAE of lowest error feature subset for tuned data: 3.950154247649287
+validation MAE of forecastable features feature subset for tuned data: 3.7809630169825494
+validation MAE of date only feature subset for tuned data: 3.908182296601407
+validation MAE of full feature subset for tuned data: 3.7520135878097403

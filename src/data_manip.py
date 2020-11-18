@@ -47,6 +47,12 @@ def numeric_tod(dataset):
     df.TOD = df.TOD.apply(lambda x : int(x[:2])*60+int(x[3:]))
     return df
 
+def rush_hr_tod_dist(dataset):
+    df = pd.DataFrame(dataset)
+    # Expect TOd to have the format ##:##
+    df["rush_dist"] = df.TOD.apply(lambda x : np.absolute(x - 800))
+    return df
+
 # Discretize data - partition a continuous feature into bins
 # of equal frequency
 def discretized_data(dataset, binsize, cont_ft):
