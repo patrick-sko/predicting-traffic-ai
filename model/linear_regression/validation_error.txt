@@ -51,3 +51,15 @@ validation MAE of lowest error feature subset for tuned data: 2.7625397863691226
 validation MAE of forecastable features feature subset for tuned data: 2.644891211731085
 validation MAE of date only feature subset for tuned data: 2.7120570966103346
 validation MAE of full feature subset for tuned data: 2.6198205699272537
+==============================================
+Test tuned prediction
+test RMSE of inuitivive feature subset for tuned data: 3.7539202880355256
+test RMSE of forecastable features feature subset for tuned data: 3.761700487650346
+test RMSE of lowest error feature subset for tuned data: 3.940105644736422
+test RMSE of date only feature subset for tuned data: 3.8815618084075476
+test RMSE of full feature subset for tuned data: 3.7258159576150085
+test MAE of inuitivive feature subset for tuned data: 2.6090995862779347
+test MAE of forecastable features feature subset for tuned data: 2.614531521984092
+test MAE of lowest error feature subset for tuned data: 2.7560028763615647
+test MAE of date only feature subset for tuned data: 2.6748199057339277
+test MAE of full feature subset for tuned data: 2.5858696276531457

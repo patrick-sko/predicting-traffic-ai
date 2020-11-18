@@ -149,3 +149,44 @@ for k,(v1,v2) in subset_validation_errors.items():
 for k,(v1,v2) in subset_validation_errors.items():
     print("validation MAE of " + k + " feature subset for tuned data: " + str(v2))
     mae_errors[k] = v2
+
+print("==============================================")
+print("Test tuned prediction")
+subset_test_errors = {}
+EXPLANATORY_SUBSET_INTUITION = ["Date", "rush_dist","Day","Month","Holiday","Incidents","temperature","weather_description","LaneClosures"]
+reg_intuitive = lr.train_basic_regress_feature_set(training_tune, EXPLANATORY_SUBSET_INTUITION, RESPONSE_COL)
+err_intuitive = lr.predict_regress_feature_set(reg_intuitive,test_tune, EXPLANATORY_SUBSET_INTUITION , RESPONSE_COL)
+subset_test_errors["inuitivive"] = err_intuitive
+
+# Forecastable features (that can be predicted)
+EXPLANATORY_SUBSET_PREDICTABLE = ["Date", "rush_dist","Day","Month","Holiday","humidity","pressure","temperature","weather_description","wind_direction","wind_speed","LaneClosures"]
+reg_predictable = lr.train_basic_regress_feature_set(training_tune, EXPLANATORY_SUBSET_PREDICTABLE, RESPONSE_COL)
+err_predictable = lr.predict_regress_feature_set(reg_predictable, test_tune, EXPLANATORY_SUBSET_PREDICTABLE, RESPONSE_COL)
+subset_test_errors["forecastable features"] = err_predictable
+
+# An feature subset based on features that had low mean squared error
+EXPLANATORY_SUBSET_LOW_ERROR_FEW = ["Date", "humidity", "wind_direction","wind_speed","LaneClosures"]
+reg_low_error_few = lr.train_basic_regress_feature_set(training, EXPLANATORY_SUBSET_LOW_ERROR_FEW , RESPONSE_COL)
+err_low_few = lr.predict_regress_feature_set(reg_low_error_few, test_tune, EXPLANATORY_SUBSET_LOW_ERROR_FEW, RESPONSE_COL)
+subset_test_errors["lowest error"] = err_low_few
+
+# Date only features
+EXPLANATORY_SUBSET_DATE_ONLY = ["Date", "rush_dist","Day","Month","Holiday"]
+reg_date = lr.train_basic_regress_feature_set(training_tune, EXPLANATORY_SUBSET_DATE_ONLY, RESPONSE_COL)
+err_date = lr.predict_regress_feature_set(reg_date, test_tune, EXPLANATORY_SUBSET_DATE_ONLY, RESPONSE_COL)
+subset_test_errors["date only"] = err_date
+
+# training_tune on all features
+EXPLANATORY_COLS_TUNED = ["Date", "rush_dist","Day","Month","Holiday","Incidents","humidity","pressure","temperature","weather_description","wind_direction","wind_speed","LaneClosures"]
+reg_complete = lr.train_basic_regress_feature_set(training_tune, EXPLANATORY_COLS_TUNED, RESPONSE_COL)
+err_complete = lr.predict_regress_feature_set(reg_complete, test_tune, EXPLANATORY_COLS_TUNED, RESPONSE_COL)
+subset_test_errors["full"] = err_complete
+
+
+for k,(v1,v2) in subset_test_errors.items():
+    print("test RMSE of " + k + " feature subset for tuned data: " + str(v1))
+    rmse_errors[k] = v1
+
+for k,(v1,v2) in subset_test_errors.items():
+    print("test MAE of " + k + " feature subset for tuned data: " + str(v2))
+    mae_errors[k] = v2
