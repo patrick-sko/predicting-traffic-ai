@@ -182,10 +182,6 @@ reg_complete = lr.train_basic_regress_feature_set(training_tune, EXPLANATORY_COL
 err_complete = lr.predict_regress_feature_set(reg_complete, test_tune, EXPLANATORY_COLS_TUNED, RESPONSE_COL)
 subset_test_errors["full"] = err_complete
 
-print("REG COMPLETE: {}".format(reg_complete))
-print("Err compelte: {}".format(err_complete))
-
-
 for k,(v1,v2) in subset_test_errors.items():
     print("test RMSE of " + k + " feature subset for tuned data: " + str(v1))
     rmse_errors[k] = v1

@@ -93,6 +93,8 @@ optimalD = 0
 #setting random_state=seed for all RF below to produce deterministic results
 
 # Finding optimal number of trees for RF
+print("==================================================================")
+print("n_estimator Error:")
 for n in nAll:
         regN = RandomForestRegressor(n_estimators=n, random_state=0).fit(X,Y)
 
@@ -104,8 +106,8 @@ for n in nAll:
         # i+=1
         if (errorN < minErrorN): 
                 optimalN = n
-        print("RMSE of Random forest on test data with {} trees generated: {} \n".format(n, errorN))
-        print("MAE of Random forest on test data with {} trees generated: {} \n".format(n, errorNMAE))
+        print("RMSE of Random forest on test data with {} trees generated: {}".format(n, errorN))
+        print("MAE of Random forest on test data with {} trees generated: {}".format(n, errorNMAE))
 
 
 # figN, axN = plt.subplots()
@@ -118,6 +120,8 @@ axN.legend()
 figN.savefig(PLOT_PATH + "RF-n-estimators.png")
 
 # Finding optimal number of values to split on
+print("==================================================================")
+print("max_features Error:")
 for m in mValues:
         regM = RandomForestRegressor(max_features=m, random_state=0).fit(X,Y)
 
@@ -130,8 +134,8 @@ for m in mValues:
         if (errorM < minErrorM): 
                 optimalM = m
 
-        print("RSME of Random forest on test data with {} features split on: {} \n".format(m, errorM))
-        print("MAE of Random forest on test data with {} features split on: {} \n".format(m, errorMMAE))
+        print("RSME of Random forest on test data with {} features split on: {}".format(m, errorM))
+        print("MAE of Random forest on test data with {} features split on: {}".format(m, errorMMAE))
 
 
 # figM, axM = plt.subplots()
@@ -144,6 +148,8 @@ axM.legend()
 figM.savefig(PLOT_PATH + "RF-max-features.png")
 
 # Finding optimal max depth
+print("==================================================================")
+print("max_depth Error:")
 for d in dValues:
         regD = RandomForestRegressor(max_depth=d, random_state=0).fit(X,Y)
         val_predict = (regD.predict(validation[EXPLANATORY_COLS]))
@@ -154,8 +160,8 @@ for d in dValues:
         # k+=1
         if (errorD < minErrorD): 
                 optimalD = d
-        print("RMSE of Random forest on test data with a max depth of {}: {} \n".format(d, errorD))
-        print("MAE of Random forest on test data with a max depth of {}: {} \n".format(d, errorDMAE))
+        print("RMSE of Random forest on test data with a max depth of {}: {}".format(d, errorD))
+        print("MAE of Random forest on test data with a max depth of {}: {}".format(d, errorDMAE))
 
 figD, axD = plt.subplots()
 axD.plot(dValues, dMSE, label="RMSE")
@@ -166,31 +172,36 @@ axD.set_title("RMSE and MAE variation in RandomForestRegressor \n with different
 axD.legend()
 figD.savefig(PLOT_PATH + "RF-max-depth.png")
 
-
+print("==================================================================")
+print("Random Forest Model (No Tuning) Errors:")
 # Final regression with non optimal values
 regNonOptimal = RandomForestRegressor(random_state=0).fit(X,Y)
 test_predict = (regNonOptimal.predict(test[EXPLANATORY_COLS]))
 errorNonOptimnal = np.sqrt(mean_squared_error(test_predict, test[RESPONSE_COL]))
 errorNonOptimnalMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
-print("RMSE of Random forest on test data with default values for n_estimators (100), max_features(13), and max_deppth(none): {} \n".format(errorNonOptimnal))
-print("MAE of Random forest on test data with default values for n_estimators (100), max_features(13), and max_deppth(none): {} \n".format(errorNonOptimnalMAE))
+print("RMSE of Random forest on test data with default values for n_estimators (100), max_features(13), and max_deppth(none): {}".format(errorNonOptimnal))
+print("MAE of Random forest on test data with default values for n_estimators (100), max_features(13), and max_deppth(none): {}".format(errorNonOptimnalMAE))
 
 # Final regression with optimal values
+print("==================================================================")
+print("Random Forest Model (Optimal Values) Errors:")
 regFinal = RandomForestRegressor(n_estimators=optimalN, max_features=optimalM, max_depth=optimalD, random_state=0).fit(X,Y)
 test_predict = (regFinal.predict(test[EXPLANATORY_COLS]))
 errorFinal = np.sqrt(mean_squared_error(test_predict, test[RESPONSE_COL]))
 errorFinalMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
-print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinal))
-print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinalMAE))
+print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {}".format(optimalN, optimalM, optimalD, errorFinal))
+print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {}".format(optimalN, optimalM, optimalD, errorFinalMAE))
 
 # Final regression with optimal values and only predictable columns
+print("==================================================================")
+print("Random Forest Model (Predictable Columns and Optimal Values) Errors:")
 regFinalPredictable = RandomForestRegressor(n_estimators=optimalN, max_features=optimalM, max_depth=optimalD, random_state=0).fit(XPredictable,Y)
 test_predict = (regFinalPredictable.predict(test[PREDICTABLE_COLS]))
 errorPredictable = np.sqrt(mean_squared_error(test_predict, test[RESPONSE_COL]))
 errorPredictableMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
 
-print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {} \n".format(optimalN, optimalM, optimalD, errorPredictable))
-print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {} \n".format(optimalN, optimalM, optimalD, errorPredictableMAE))
+print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {}".format(optimalN, optimalM, optimalD, errorPredictable))
+print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {}".format(optimalN, optimalM, optimalD, errorPredictableMAE))
 
 dataset = pd.read_excel(DATA_PATH)
 CONT_FT_RAW = ["humidity","pressure","temperature","wind_direction"]
