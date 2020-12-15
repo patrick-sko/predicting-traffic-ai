@@ -110,7 +110,7 @@ for n in nAll:
         print("MAE of Random forest on test data with {} trees generated: {}".format(n, errorNMAE))
 
 
-# figN, axN = plt.subplots()
+figN, axN = plt.subplots()
 axN.plot(nAll, nMSE, label="RMSE")
 axN.plot(nAll, nMAE, label="MAE")
 axN.set_xlabel("n_estimators in RandomForestRegressor")
@@ -138,7 +138,7 @@ for m in mValues:
         print("MAE of Random forest on test data with {} features split on: {}".format(m, errorMMAE))
 
 
-# figM, axM = plt.subplots()
+figM, axM = plt.subplots()
 axM.plot(mValues, mMSE, label="RMSE")
 axM.plot(mValues, mMAE, label="MAE")
 axM.set_xlabel("max_features in RandomForestRegressor")
