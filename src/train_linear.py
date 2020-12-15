@@ -182,6 +182,9 @@ reg_complete = lr.train_basic_regress_feature_set(training_tune, EXPLANATORY_COL
 err_complete = lr.predict_regress_feature_set(reg_complete, test_tune, EXPLANATORY_COLS_TUNED, RESPONSE_COL)
 subset_test_errors["full"] = err_complete
 
+print("REG COMPLETE: {}".format(reg_complete))
+print("Err compelte: {}".format(err_complete))
+
 
 for k,(v1,v2) in subset_test_errors.items():
     print("test RMSE of " + k + " feature subset for tuned data: " + str(v1))
@@ -190,3 +193,28 @@ for k,(v1,v2) in subset_test_errors.items():
 for k,(v1,v2) in subset_test_errors.items():
     print("test MAE of " + k + " feature subset for tuned data: " + str(v2))
     mae_errors[k] = v2
+
+# Generating heat maps for prediction
+test_predict = lr.predict_regress(reg_complete, test_tune, EXPLANATORY_COLS_TUNED, RESPONSE_COL)
+TOD_COL = "TOD"
+
+closeTest = 0.003*test[RESPONSE_COL]
+closePredict = 0.003*test_predict
+closeTestOverlay = [[0, 0, 1]]
+closePredictOverlay = [[1, 0, 0]]
+
+figP, axP = plt.subplots()
+axP.scatter(test[TOD_COL], test_predict, c=closePredict,  alpha=0.5)
+axP.set_xlabel("TOD")
+axP.set_ylabel("Travel Time")
+axP.set_title("Regression Predicted Travel time")
+figP.savefig("heatMapPredictRegression.png")
+
+figC, axC = plt.subplots()
+axC.scatter(test[TOD_COL], test[RESPONSE_COL], c=closeTestOverlay, alpha=0.5, label="Actual Travel Time")
+axC.scatter(test[TOD_COL], test_predict, c=closePredictOverlay, alpha=0.5, label="Predicted Travel Time")
+axC.set_xlabel("TOD")
+axC.set_ylabel("Travel Time")
+axC.set_title("Predicted Travel time")
+axC.legend()
+figC.savefig("heatMapCombinedRegression.png")

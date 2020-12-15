@@ -18,6 +18,8 @@ PLOT_PATH = "../model/random_forest/"
 RESPONSE_COL = "Travel Time"
 # DATE which we do not take as explanatory
 DATE_COL = "Date"
+
+TOD_COL = "TOD"
 # All columns except Travel time and date are explanatory
 EXPLANATORY_COLS = ["Date","TOD","Day","Month","Holiday","Incidents","humidity","pressure","temperature","weather_description","wind_direction","wind_speed","LaneClosures"]
 
@@ -35,6 +37,7 @@ discrete_data = (discretized_data(dataset, 10, CONT_FT))
 
 # partition into training, test, and validation
 (training, validation, test) =  sample(discrete_data)
+
 
 X = training[EXPLANATORY_COLS]
 Y = training[RESPONSE_COL]
@@ -105,7 +108,7 @@ for n in nAll:
         print("MAE of Random forest on test data with {} trees generated: {} \n".format(n, errorNMAE))
 
 
-figN, axN = plt.subplots()
+# figN, axN = plt.subplots()
 axN.plot(nAll, nMSE, label="RMSE")
 axN.plot(nAll, nMAE, label="MAE")
 axN.set_xlabel("n_estimators in RandomForestRegressor")
@@ -131,7 +134,7 @@ for m in mValues:
         print("MAE of Random forest on test data with {} features split on: {} \n".format(m, errorMMAE))
 
 
-figM, axM = plt.subplots()
+# figM, axM = plt.subplots()
 axM.plot(mValues, mMSE, label="RMSE")
 axM.plot(mValues, mMAE, label="MAE")
 axM.set_xlabel("max_features in RandomForestRegressor")
@@ -164,7 +167,7 @@ axD.legend()
 figD.savefig(PLOT_PATH + "RF-max-depth.png")
 
 
-# Final regression with optimal values
+# Final regression with non optimal values
 regNonOptimal = RandomForestRegressor(random_state=0).fit(X,Y)
 test_predict = (regNonOptimal.predict(test[EXPLANATORY_COLS]))
 errorNonOptimnal = np.sqrt(mean_squared_error(test_predict, test[RESPONSE_COL]))
@@ -180,7 +183,9 @@ errorFinalMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
 print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinal))
 print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinalMAE))
 
-
+optimalN= 1100
+optimalM= 1
+optimalD= 50
 # Final regression with optimal values and only predictable columns
 regFinalPredictable = RandomForestRegressor(n_estimators=optimalN, max_features=optimalM, max_depth=optimalD, random_state=0).fit(XPredictable,Y)
 test_predict = (regFinalPredictable.predict(test[PREDICTABLE_COLS]))
@@ -189,3 +194,36 @@ errorPredictableMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
 
 print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {} \n".format(optimalN, optimalM, optimalD, errorPredictable))
 print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth, using only predictable columns: {} \n".format(optimalN, optimalM, optimalD, errorPredictableMAE))
+
+dataset = pd.read_excel(DATA_PATH)
+CONT_FT_RAW = ["humidity","pressure","temperature","wind_direction"]
+rawData = (discretized_data(dataset, 10, CONT_FT_RAW))
+(trainingRaw, validationRaw, testRaw) =  sample(rawData)
+
+closeTest = 0.003*test[RESPONSE_COL]
+closePredict = 0.003*test_predict
+closeTestOverlay = [[0, 0, 1]]
+closePredictOverlay = [[1, 0, 0]]
+
+figH, axH = plt.subplots()
+axH.scatter(testRaw[TOD_COL], test[RESPONSE_COL], c=closeTest,  alpha=0.5)
+axH.set_xlabel("TOD")
+axH.set_ylabel("Travel Time")
+axH.set_title("Actual Travel time")
+figH.savefig("heatMapActual.png")
+
+figP, axP = plt.subplots()
+axP.scatter(testRaw[TOD_COL], test_predict, c=closePredict, alpha=0.5)
+axP.set_xlabel("TOD")
+axP.set_ylabel("Travel Time")
+axP.set_title("Randolm Forest Predicted Travel time")
+figP.savefig("heatMapPredictForest.png")
+
+figC, axC = plt.subplots()
+axC.scatter(testRaw[TOD_COL], test[RESPONSE_COL], c=closeTestOverlay, alpha=0.5, label="Actual Travel Time")
+axC.scatter(testRaw[TOD_COL], test_predict, c=closePredictOverlay, alpha=0.5, label="Predicted Travel Time")
+axC.set_xlabel("TOD")
+axC.set_ylabel("Travel Time")
+axC.set_title("Predicted Travel time")
+axC.legend()
+figC.savefig("heatMapCombined.png")

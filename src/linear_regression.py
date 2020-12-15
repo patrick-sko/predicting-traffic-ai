@@ -65,3 +65,9 @@ def predict_regress_feature_set(reg, testdata, explanatory_cols, response_col):
     mae_error = mean_absolute_error(test_predict, testdata[response_col])
     return (rmse_error, mae_error)
 
+# predict a dataset returning the predictions
+def predict_regress(reg, testdata, explanatory_cols, response_col):
+    test_feature_data = testdata[explanatory_cols]
+    test_predict = reg.predict(test_feature_data)
+    return test_predict
+
