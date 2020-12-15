@@ -15,6 +15,7 @@ Features:
 - Train a Random Forest model to repdict long term travel time
 - Measure error in prediction accuracy with root mean square error(RMSE) and mean absolute error(MAE)
 - Plot results of different experiments for the Simple Linear Regression, Multiple Linear Regression, and Random Forest models
+- Plot heat maps to compare model predictions to actual travel time
 
 Required Libraries:
 -------------------
