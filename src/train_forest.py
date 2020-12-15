@@ -183,9 +183,6 @@ errorFinalMAE = mean_absolute_error(test_predict, test[RESPONSE_COL])
 print("RMSE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinal))
 print("MAE of Random forest on test data with {} trees generated, {} features split on, and {} max depth: {} \n".format(optimalN, optimalM, optimalD, errorFinalMAE))
 
-optimalN= 1100
-optimalM= 1
-optimalD= 50
 # Final regression with optimal values and only predictable columns
 regFinalPredictable = RandomForestRegressor(n_estimators=optimalN, max_features=optimalM, max_depth=optimalD, random_state=0).fit(XPredictable,Y)
 test_predict = (regFinalPredictable.predict(test[PREDICTABLE_COLS]))
